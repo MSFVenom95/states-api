@@ -21,7 +21,7 @@ const getStatePopulation = (req, res) => {
     const state = statesData.find(st => st.code === req.code);
     res.json({
         state: state.state,
-        population: state.population
+        population: state.population.toLocaleString("en-US")
     });
 }
 
@@ -50,7 +50,7 @@ const getStateFunFact = async (req, res) => {
 }
 
 const createStateFunFact = async (req, res) => {
-    if (!req.body?.funfacts) {
+    if (!req.body || req.body.funfacts === undefined) {
         return res.status(400).json({ message: 'State fun facts value required' });
     }
 
