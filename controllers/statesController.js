@@ -174,14 +174,16 @@ const getAllStates = async (req, res) => {
 
         const mergedStates = statesList.map(state => {
             const stateFacts = mongoStates.find(ms => ms.stateCode === state.code);
-            // Only attach if funfacts exists AND has items
+            
+            // Create a fresh object from the JSON state
+            let stateObj = { ...state };
+            
+            // ONLY attach the property if funfacts exists and is not empty
             if (stateFacts && stateFacts.funfacts && stateFacts.funfacts.length > 0) {
-                return { ...state, funfacts: stateFacts.funfacts };
+                stateObj.funfacts = stateFacts.funfacts;
             }
-            // Forcefully ensure empty arrays are not attached
-            const cleanState = { ...state };
-            delete cleanState.funfacts; 
-            return cleanState;
+            
+            return stateObj;
         });
 
         res.json(mergedStates);
@@ -197,13 +199,15 @@ const getState = async (req, res) => {
         const state = statesData.find(st => st.code === req.code);
         const stateFacts = await State.findOne({ stateCode: req.code }).exec();
 
+        // Create a fresh object from the JSON state
+        let stateObj = { ...state };
+
+        // ONLY attach the property if funfacts exists and is not empty
         if (stateFacts && stateFacts.funfacts && stateFacts.funfacts.length > 0) {
-            res.json({ ...state, funfacts: stateFacts.funfacts });
-        } else {
-            const cleanState = { ...state };
-            delete cleanState.funfacts;
-            res.json(cleanState);
+            stateObj.funfacts = stateFacts.funfacts;
         }
+
+        res.json(stateObj);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server Error' });
