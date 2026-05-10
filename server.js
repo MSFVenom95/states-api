@@ -38,10 +38,11 @@ app.use((req, res) => {
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
     const path = require('path');
-    app.get('^/$|/index(.html)?', (req, res) => {
-        res.sendFile(path.join(__dirname, 'views', 'index.html'));
-    });
-    app.all('*', (req, res) => {
+    // Serve the index.html on the root route
+app.get(['/', '/index', '/index.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+    app.use((req, res) => {
         res.status(404);
         if (req.accepts('html')) {
             res.sendFile(path.join(__dirname, 'views', '404.html'));
