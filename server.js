@@ -21,7 +21,7 @@ app.use(express.json());
 
 // Serve the index HTML directly on the root route
 app.get(['/', '/index', '/index.html'], (req, res) => {
-    res.type('html').send('<html><body><h1>Welcome to the States API</h1></body></html>');
+    res.type('html').send('<!DOCTYPE html><html lang="en"><head><title>States API</title></head><body><h1>Welcome to the States API</h1></body></html>');
 });
 
 // API Routes
@@ -31,7 +31,7 @@ app.use('/states', require('./routes/api/states'));
 app.use((req, res) => {
     res.status(404);
     if (req.accepts('html')) {
-        res.type('html').send('<html><body><h1>404 Not Found</h1></body></html>');
+        res.type('html').send('<!DOCTYPE html><html lang="en"><head><title>404 Not Found</title></head><body><h1>404 Not Found</h1></body></html>');
     } else if (req.accepts('json')) {
         res.json({ error: "404 Not Found" });
     } else {
