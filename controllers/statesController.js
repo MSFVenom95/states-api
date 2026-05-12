@@ -25,7 +25,7 @@ const getAllStates = async (req, res) => {
                 stateObj.funfacts = [...stateFacts.funfacts];
             } else {
                 // If it's completely empty, ensure the property is destroyed
-                delete stateObj.funfacts;
+                stateObj.funfacts = [];
             }
             
             return stateObj;
